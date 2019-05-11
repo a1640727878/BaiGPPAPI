@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.plugin' version '0.9.0'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name = "Sponge"
+        url = "http://repo.spongepowered.org/maven"
+    }
+    maven {
+        name = "Forge"
+        url = "http://files.minecraftforge.net/maven"
+    }
+    maven {
+        name = "Jitpack"
+        url = "https://jitpack.io"
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+group = pluginGroup
+version = pluginVersion
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:7.1.0'
+    compile 'me.ryanhamshire:griefprevention:1.12.2-4.3.0.662:api'
+    compile 'com.github.rojo8399:PlaceholderAPI:4.5.1'
+}
+
+sponge {
+    plugin {
+        id = pluginId
+        meta {
+            name = pluginName
+            version = pluginVersion
+            description = null
+            url = null
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
