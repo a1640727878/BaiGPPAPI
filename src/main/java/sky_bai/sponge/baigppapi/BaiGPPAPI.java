@@ -19,6 +19,9 @@ import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.context.Context;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializer;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.storage.WorldProperties;
 
 import me.rojo8399.placeholderapi.Placeholder;
@@ -30,6 +33,7 @@ import me.ryanhamshire.griefprevention.api.claim.Claim;
 import me.ryanhamshire.griefprevention.api.claim.ClaimContexts;
 import me.ryanhamshire.griefprevention.api.claim.ClaimFlag;
 import me.ryanhamshire.griefprevention.api.claim.ClaimManager;
+import me.ryanhamshire.griefprevention.api.data.PlayerData;
 
 @Plugin(id = "baigppapi", name = "BaiGPPAPI", dependencies = { @Dependency(id = "placeholderapi"), @Dependency(id = "griefprevention") })
 public class BaiGPPAPI {
@@ -63,6 +67,7 @@ public class BaiGPPAPI {
 		if (token != null) {
 			Claim a1 = GriefPrevention.getApi().getClaimManager(source.getWorld()).getClaimAt(source.getLocation());
 			Map<String, ClaimFlag> a2 = new HashMap<String, ClaimFlag>();
+			PlayerData a3 = GriefPrevention.getApi().getGlobalPlayerData(source.getUniqueId()).get();
 			for (ClaimFlag b1 : ClaimFlag.values()) {
 				a2.put(b1+"", b1);
 			}
@@ -75,6 +80,21 @@ public class BaiGPPAPI {
 					}
 					return a1.getPermissionValue(a2.get(b1), "any", a1.getContext()).name().toLowerCase();
 				}
+			} else if (token.contentEquals("cname")) {
+				Optional<Text> b1 = a1.getData().getName();
+				if (b1.isPresent()) {
+					return TextSerializers.PLAIN.serialize(b1.get());
+				} else {
+					return "none";
+				}
+			} else if (token.contentEquals("cblocks_max")) {
+				return ""+a3.getMaxAccruedClaimBlocks();
+			} else if (token.contentEquals("cblocks")) {
+				return ""+a3.getBonusClaimBlocks();
+			} else if (token.contentEquals("Claims_max")) {
+				return ""+a3.getCreateClaimLimit();
+			} else if (token.contentEquals("Claims")) {
+				return ""+a3.getClaims().size();
 			}
 		}
 		return "";
