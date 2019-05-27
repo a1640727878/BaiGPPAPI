@@ -1,9 +1,6 @@
 package sky_bai.sponge.baigppapi;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,21 +15,15 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
-import org.spongepowered.api.world.storage.WorldProperties;
-
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Source;
 import me.rojo8399.placeholderapi.Token;
 import me.ryanhamshire.griefprevention.GriefPrevention;
 import me.ryanhamshire.griefprevention.api.claim.Claim;
-import me.ryanhamshire.griefprevention.api.claim.ClaimContexts;
 import me.ryanhamshire.griefprevention.api.claim.ClaimFlag;
-import me.ryanhamshire.griefprevention.api.claim.ClaimManager;
 import me.ryanhamshire.griefprevention.api.data.PlayerData;
 
 @Plugin(id = "baigppapi", name = "BaiGPPAPI", dependencies = { @Dependency(id = "placeholderapi"), @Dependency(id = "griefprevention") })
@@ -95,6 +86,8 @@ public class BaiGPPAPI {
 				return ""+a3.getCreateClaimLimit();
 			} else if (token.contentEquals("Claims")) {
 				return ""+a3.getClaims().size();
+			} else if (token.contentEquals("ClaimsOwner")) {
+				return ""+a1.getOwnerName().toPlain();
 			}
 		}
 		return "";
