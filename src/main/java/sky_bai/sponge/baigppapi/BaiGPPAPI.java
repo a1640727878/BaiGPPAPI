@@ -60,11 +60,11 @@ public class BaiGPPAPI {
 			Map<String, ClaimFlag> a2 = new HashMap<String, ClaimFlag>();
 			PlayerData a3 = GriefPrevention.getApi().getGlobalPlayerData(source.getUniqueId()).get();
 			for (ClaimFlag b1 : ClaimFlag.values()) {
-				a2.put(b1+"", b1);
+				a2.put(b1 + "", b1);
 			}
 			if (token.contains("flag:")) {
 				String b1 = token.replace("flag:", "").replaceFirst(":(.*)", "");
-				String b2 =  token.replace("flag:"+b1+":", "");
+				String b2 = token.replace("flag:" + b1 + ":", "");
 				if (a2.containsKey(b1)) {
 					if (b2 != null) {
 						return a1.getPermissionValue(a2.get(b1), b2, a1.getContext()).name().toLowerCase();
@@ -78,17 +78,23 @@ public class BaiGPPAPI {
 				} else {
 					return "none";
 				}
-			} else if (token.contentEquals("cblocks_max")) {
-				return ""+a3.getMaxAccruedClaimBlocks();
-			} else if (token.contentEquals("cblocks")) {
-				return ""+a3.getBonusClaimBlocks();
-			} else if (token.contentEquals("Claims_max")) {
-				return ""+a3.getCreateClaimLimit();
-			} else if (token.contentEquals("Claims")) {
-				return ""+a3.getClaims().size();
+			} else if (token.contentEquals("AccruedClaimBlocks")) {
+				return "" + a3.getAccruedClaimBlocks();
+			} else if (token.contentEquals("BonusClaimBlocks")) {
+				return "" + a3.getBonusClaimBlocks();
+			} else if (token.contentEquals("CreateClaimLimit")) {
+				return "" + a3.getCreateClaimLimit();
+			}else if (token.contentEquals("BlocksAccruedPerHour")) {
+				return "" + a3.getBlocksAccruedPerHour();
+			} else if (token.contentEquals("MaxAccruedClaimBlocks")) {
+				return "" + a3.getMaxAccruedClaimBlocks();
+			} else if (token.contentEquals("RemainingClaimBlocks")) {
+				return "" + a3.getRemainingClaimBlocks();
+			} else if (token.contentEquals("ClaimLimit")) {
+				return "" + a3.getClaims().size();
 			} else if (token.contentEquals("ClaimsOwner")) {
-				return ""+a1.getOwnerName().toPlain();
-			}
+				return "" + a1.getOwnerName().toPlain();
+			} 
 		}
 		return "";
 	}
