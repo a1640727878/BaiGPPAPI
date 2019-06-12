@@ -22,6 +22,7 @@ import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Source;
 import me.rojo8399.placeholderapi.Token;
 import me.ryanhamshire.griefprevention.GriefPrevention;
+import me.ryanhamshire.griefprevention.api.GriefPreventionApi;
 import me.ryanhamshire.griefprevention.api.claim.Claim;
 import me.ryanhamshire.griefprevention.api.claim.ClaimFlag;
 import me.ryanhamshire.griefprevention.api.data.PlayerData;
@@ -52,49 +53,50 @@ public class BaiGPPAPI {
 			});
 		}
 	}
-
+	
 	@Placeholder(id = "gp")
-	public String gp(@Source Player source, @Nullable @Token String token) {
-		if (token != null) {
-			Claim a1 = GriefPrevention.getApi().getClaimManager(source.getWorld()).getClaimAt(source.getLocation());
-			Map<String, ClaimFlag> a2 = new HashMap<String, ClaimFlag>();
-			PlayerData a3 = GriefPrevention.getApi().getGlobalPlayerData(source.getUniqueId()).get();
-			for (ClaimFlag b1 : ClaimFlag.values()) {
-				a2.put(b1 + "", b1);
+	public Object GP2(@Source Player source, @Nullable @Token String token) {
+		GriefPreventionApi gpApi = GriefPrevention.getApi();
+		Claim onClaim = gpApi.getClaimManager(source.getWorld()).getClaimAt(source.getLocation());
+		Optional<PlayerData> playeData = gpApi.getGlobalPlayerData(source.getUniqueId());
+		Map<String, Object> GPPAPI = new HashMap<String, Object>();
+		GPPAPI.put("onClaimOwnerName", onClaim.getOwnerName());
+		GPPAPI.put("AccruedClaimBlocks", playeData.get().getAccruedClaimBlocks());
+		GPPAPI.put("BlocksAccruedPerHour", playeData.get().getBlocksAccruedPerHour());
+		GPPAPI.put("BonusClaimBlocks", playeData.get().getBonusClaimBlocks());
+		GPPAPI.put("ChestClaimExpiration", playeData.get().getChestClaimExpiration());
+		GPPAPI.put("CreateClaimLimit", playeData.get().getCreateClaimLimit());
+		GPPAPI.put("InitialClaimBlocks", playeData.get().getInitialClaimBlocks());
+		GPPAPI.put("MaxAccruedClaimBlocks", playeData.get().getMaxAccruedClaimBlocks());
+		GPPAPI.put("RemainingClaimBlocks", playeData.get().getRemainingClaimBlocks());
+		if (token.equalsIgnoreCase("debug")) {
+			return onClaim.getData().getName();
+		}
+		if (token.equalsIgnoreCase("onClaimName")) {
+			Optional<Text> claimNameOptional = onClaim.getData().getName();
+			if (claimNameOptional.isPresent()) {
+				return TextSerializers.PLAIN.serialize(claimNameOptional.get());
 			}
-			if (token.contains("flag:")) {
-				String b1 = token.replace("flag:", "").replaceFirst(":(.*)", "");
-				String b2 = token.replace("flag:" + b1 + ":", "");
-				if (a2.containsKey(b1)) {
-					if (b2 != null) {
-						return a1.getPermissionValue(a2.get(b1), b2, a1.getContext()).name().toLowerCase();
-					}
-					return a1.getPermissionValue(a2.get(b1), "any", a1.getContext()).name().toLowerCase();
+			return "null";
+		}
+		Map<String, ClaimFlag> a2 = new HashMap<String, ClaimFlag>();
+		for (ClaimFlag b1 : ClaimFlag.values()) {
+			a2.put(b1 + "", b1);
+		}
+		for (String string : GPPAPI.keySet()) {
+			if (token.equalsIgnoreCase(string)) {
+				return GPPAPI.get(string);
+			}
+		}
+		if (token.contains("flag:")) {
+			String b1 = token.replace("flag:", "").replaceFirst(":(.*)", "");
+			String b2 = token.replace("flag:" + b1 + ":", "");
+			if (a2.containsKey(b1)) {
+				if (b2 != null) {
+					return onClaim.getPermissionValue(a2.get(b1), b2, onClaim.getContext()).name().toLowerCase();
 				}
-			} else if (token.contentEquals("cname")) {
-				Optional<Text> b1 = a1.getData().getName();
-				if (b1.isPresent()) {
-					return TextSerializers.PLAIN.serialize(b1.get());
-				} else {
-					return "none";
-				}
-			} else if (token.contentEquals("AccruedClaimBlocks")) {
-				return "" + a3.getAccruedClaimBlocks();
-			} else if (token.contentEquals("BonusClaimBlocks")) {
-				return "" + a3.getBonusClaimBlocks();
-			} else if (token.contentEquals("CreateClaimLimit")) {
-				return "" + a3.getCreateClaimLimit();
-			}else if (token.contentEquals("BlocksAccruedPerHour")) {
-				return "" + a3.getBlocksAccruedPerHour();
-			} else if (token.contentEquals("MaxAccruedClaimBlocks")) {
-				return "" + a3.getMaxAccruedClaimBlocks();
-			} else if (token.contentEquals("RemainingClaimBlocks")) {
-				return "" + a3.getRemainingClaimBlocks();
-			} else if (token.contentEquals("ClaimLimit")) {
-				return "" + a3.getClaims().size();
-			} else if (token.contentEquals("ClaimsOwner")) {
-				return "" + a1.getOwnerName().toPlain();
-			} 
+				return onClaim.getPermissionValue(a2.get(b1), "any", onClaim.getContext()).name().toLowerCase();
+			}
 		}
 		return "";
 	}
