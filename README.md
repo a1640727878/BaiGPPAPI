@@ -1,5 +1,7 @@
 # BaiGPPAPI
 
+## 变量
+
 %GP_OnClaimName% 玩家当前所在领地的名字  
 %GP_OnClaimOwnerName% 玩家当前所在领地主人的名字  
   
