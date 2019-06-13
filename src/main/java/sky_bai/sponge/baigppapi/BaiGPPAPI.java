@@ -69,6 +69,7 @@ public class BaiGPPAPI {
 		GPPAPI.put("InitialClaimBlocks", playeData.get().getInitialClaimBlocks());
 		GPPAPI.put("MaxAccruedClaimBlocks", playeData.get().getMaxAccruedClaimBlocks());
 		GPPAPI.put("RemainingClaimBlocks", playeData.get().getRemainingClaimBlocks());
+		GPPAPI.put("ClaimLimit", playeData.get().getClaims().size());
 		if (token.equalsIgnoreCase("debug")) {
 			return onClaim.getData().getName();
 		}
